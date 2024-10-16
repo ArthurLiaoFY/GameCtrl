@@ -1,0 +1,9 @@
+.Ds_Store
+.venv
+*.jpg
+*.mp4
+__pycache__
+test*
+*.npy
+buffer_data
+
