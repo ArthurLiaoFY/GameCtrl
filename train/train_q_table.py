@@ -50,7 +50,8 @@ class TrainQTable:
             )
 
             inference_reward += redefined_reward
-            frames.append(self.env.getScreenRGB())
+            if save_animate:
+                frames.append(self.env.getScreenRGB())
 
         print(f"[{episode:06d}] inference reward: {inference_reward:.4f}")
 
