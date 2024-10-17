@@ -25,11 +25,12 @@ class Agent:
 
         # actor network
         self.dqn = DeepQNetwork(state_dim=self.state_dim, action_dim=self.action_dim)
-        self.load_network()
         # target network
         self.dqn_prime = DeepQNetwork(
             state_dim=self.state_dim, action_dim=self.action_dim
         )
+        self.load_network()
+
         self.dqn_optimizer = torch.optim.Adam(
             self.dqn.parameters(),
             lr=self.learning_rate,
@@ -49,10 +50,6 @@ class Agent:
     def update_policy(
         self,
         sample_batch: TensorDict,
-        # state_tuple: tuple,
-        # action_idx: int,
-        # reward: float,
-        # next_state_tuple: tuple,
     ) -> None:
         action_logit = self.dqn(sample_batch.get("state"))
         next_action_logit = self.dqn_prime(sample_batch.get("next_state"))
