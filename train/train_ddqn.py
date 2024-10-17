@@ -42,12 +42,19 @@ class TrainDDQN:
         while not self.env.game_over():
             action_idx = self.dqn_agent.select_action_idx(
                 state_tuple=scale_state_to_tuple(
-                    self.env.getGameState(), state_scale=None
+                    self.env.getGameState(),
+                    state_scale=self.feature_scaling,
                 )
             )
             reward = self.env.act(self.env.getActionSet()[action_idx])
-            inference_reward += reward
-            frames.append(self.env.getScreenRGB())
+            redefined_reward = reward_redefine(
+                state_dict=self.env.getGameState(),
+                reward=reward,
+            )
+
+            inference_reward += redefined_reward
+            if save_animate:
+                frames.append(self.env.getScreenRGB())
 
         print(f"[{episode:06d}] inference reward: {inference_reward:.4f}")
 
@@ -75,6 +82,11 @@ class TrainDDQN:
                 action_idx_list = []
                 reward_list = []
                 next_state_list = []
+
+                if episode % self.ddqn_kwargs.get("update_target_each_k_episode") == 0:
+                    self.dqn_agent.dqn_prime.load_state_dict(
+                        self.dqn_agent.dqn.state_dict()
+                    )
 
                 while not self.env.game_over():
                     # state
@@ -112,7 +124,8 @@ class TrainDDQN:
                     )
                     # update agent policy per step
                     self.dqn_agent.update_policy(
-                        episode=episode, sample_batch=sample_batch
+                        episode=episode,
+                        sample_batch=sample_batch,
                     )
 
                 if len(state_list) > 0:
