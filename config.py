@@ -1,3 +1,14 @@
+feature_scaling = {
+    "next_next_pipe_bottom_y": 40,
+    "next_next_pipe_dist_to_player": 512,
+    "next_next_pipe_top_y": 40,
+    "next_pipe_bottom_y": 10,
+    "next_pipe_dist_to_player": 10,
+    "next_pipe_top_y": 10,
+    "player_vel": 4,
+    "player_y": 16,
+}
+
 q_learning_kwargs = {
     "state_dim": 8,
     "action_dim": 2,
@@ -10,16 +21,6 @@ q_learning_kwargs = {
     "discount_factor": 0.99,
     "n_episodes": 300000,
     "fully_explore_step": 20000,
-    "feature_scaling": {
-        "next_next_pipe_bottom_y": 40,
-        "next_next_pipe_dist_to_player": 512,
-        "next_next_pipe_top_y": 40,
-        "next_pipe_bottom_y": 10,
-        "next_pipe_dist_to_player": 10,
-        "next_pipe_top_y": 10,
-        "player_vel": 4,
-        "player_y": 16,
-    },
 }
 
 ddqn_kwargs = {
@@ -44,15 +45,11 @@ replay_buffer_kwargs = {
     "replay_buffer_dir": "./buffer_data",
 }
 
-replay_image_buffer_kwargs = {
-    "buffer_size": 1e7,
-    "replay_buffer_dir": "./image_buffer_data",
-}
 
 train_kwargs = {
     "inference_per_episode": 20000,
+    "feature_scaling": feature_scaling,
     "q_learning_kwargs": q_learning_kwargs,
     "ddqn_kwargs": ddqn_kwargs,
     "replay_buffer_kwargs": replay_buffer_kwargs,
-    "replay_image_buffer_kwargs": replay_image_buffer_kwargs,
 }
