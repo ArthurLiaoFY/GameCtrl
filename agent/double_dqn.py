@@ -49,6 +49,7 @@ class Agent:
 
     def update_policy(
         self,
+        episode: int,
         sample_batch: TensorDict,
     ) -> None:
         action_logit = self.dqn(sample_batch.get("state"))
@@ -71,6 +72,9 @@ class Agent:
         self.dqn.zero_grad()
         dqn_loss.backward()
         self.dqn_optimizer.step()
+        
+        if episode % self.update_target_each_k_episode == 0:
+            self.dqn_prime.load_state_dict(self.dqn.state_dict())
 
     def update_lr_er(self, episode: int = 0) -> None:
         if episode > self.fully_explore_step:

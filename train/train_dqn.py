@@ -71,15 +71,22 @@ class TrainDQN:
                 train_reward = 0
                 self.env.reset_game()
 
+                state_list = []
+                action_idx_list = []
+                reward_list = []
+                next_state_list = []
+
                 while not self.env.game_over():
                     # state
-                    state = scale_state_to_tuple(
+                    state_tuple = scale_state_to_tuple(
                         state_dict=self.env.getGameState(),
                         state_scale=None,
                     )
+                    state_list.append(state_tuple)
 
                     # action
-                    action_idx = self.dqn_agent.select_action_idx(state)
+                    action_idx = self.dqn_agent.select_action_idx(state_tuple)
+                    action_idx_list.append(action_idx)
 
                     # reward
                     reward = self.env.act(self.env.getActionSet()[action_idx])
@@ -88,11 +95,14 @@ class TrainDQN:
                         state_dict=next_state_dict,
                         reward=reward,
                     )
+                    reward_list.append(redefined_reward)
+
                     # next state
                     next_state_tuple = scale_state_to_tuple(
                         state_dict=next_state_dict,
                         state_scale=None,
                     )
+                    next_state_list.append(next_state_tuple)
 
                     # cumulate reward
                     train_reward += redefined_reward
@@ -101,20 +111,22 @@ class TrainDQN:
                         batch_size=self.ddqn_kwargs.get("batch_size")
                     )
                     # update agent policy per step
-                    self.dqn_agent.update_policy(sample_batch=sample_batch)
+                    self.dqn_agent.update_policy(
+                        episode=episode, sample_batch=sample_batch
+                    )
 
-                if len(state) >= 0:
+                if len(state_list) > 0:
                     buffer_data.replay_buffer.extend(
                         TensorDict(
                             {
-                                "state": torch.Tensor(state)[None, :],
-                                "action_idx": torch.Tensor([action_idx])[None, :],
-                                "redefined_reward": torch.Tensor([redefined_reward])[
-                                    None, :
+                                "state": torch.Tensor(np.array(state_list)),
+                                "action_idx": torch.Tensor(np.array(action_idx_list))[
+                                    :, None
                                 ],
-                                "next_state": torch.Tensor(next_state_tuple)[None, :],
+                                "reward": torch.Tensor(np.array(reward_list))[:, None],
+                                "next_state": torch.Tensor(np.array(next_state_list)),
                             },
-                            batch_size=[1],
+                            batch_size=[len(state_list)],
                         )
                     )
 
