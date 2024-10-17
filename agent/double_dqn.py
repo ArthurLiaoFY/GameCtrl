@@ -23,8 +23,13 @@ class Agent:
         self.__dict__.update(kwargs)
         self.start_explore
 
+        # actor network
         self.dqn = DeepQNetwork(state_dim=self.state_dim, action_dim=self.action_dim)
         self.load_network()
+        # target network
+        self.dqn_prime = DeepQNetwork(
+            state_dim=self.state_dim, action_dim=self.action_dim
+        )
         self.dqn_optimizer = torch.optim.Adam(
             self.dqn.parameters(),
             lr=self.learning_rate,
@@ -36,7 +41,8 @@ class Agent:
 
         else:
             action_idx = np.argmax(
-                self.dqn(torch.Tensor(state_tuple)[None, :]).detach().numpy()
+                self.dqn(torch.Tensor(state_tuple)[None, :]).detach().numpy(),
+                axis=1,
             ).squeeze()
         return action_idx
 
@@ -49,7 +55,7 @@ class Agent:
         # next_state_tuple: tuple,
     ) -> None:
         action_logit = self.dqn(sample_batch.get("state"))
-        next_action_logit = self.dqn(sample_batch.get("next_state"))
+        next_action_logit = self.dqn_prime(sample_batch.get("next_state"))
 
         td_target = (
             sample_batch.get("reward")
@@ -112,6 +118,7 @@ class Agent:
                     weights_only=True,
                 )
             )
+            self.dqn_prime.load_state_dict(self.dqn.state_dict())
             print(
                 f"Found trained model under {model_file_path}, weights have been loaded."
             )

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from tensordict import TensorDict
 
-from agent.dqn import Agent
+from agent.double_dqn import Agent
 from ple import PLE
 from ple.games.flappybird import FlappyBird
 from train.collect_buffer_data import CollectBufferData
@@ -63,7 +63,7 @@ class TrainDQN:
         save_traj_to_buffer: bool = True,
         save_network: bool = True,
     ):
-        for episode in range(self.n_episodes + 1):
+        for episode in range(self.dqn_kwargs.get("n_episodes") + 1):
             if episode % self.inference_per_episode == 0:
                 self.inference_once(episode=episode)
             else:

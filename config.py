@@ -34,7 +34,7 @@ dqn_kwargs = {
     "explore_rate_decay": 0.999,
     "discount_factor": 0.99,
     "n_episodes": 10000,
-    "fully_explore_step": 2000,
+    "fully_explore_step": 0,
 }
 
 # Replay buffer
