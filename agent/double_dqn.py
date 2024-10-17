@@ -7,11 +7,11 @@ class DeepQNetwork(torch.nn.Module):
     def __init__(self, state_dim: int, action_dim: int) -> None:
         super(DeepQNetwork, self).__init__()
         self.model = torch.nn.Sequential(
-            torch.nn.Linear(state_dim, 256),
+            torch.nn.Linear(state_dim, 64),
             torch.nn.ReLU(),
-            torch.nn.Linear(256, 256),
+            torch.nn.Linear(64, 64),
             torch.nn.ReLU(),
-            torch.nn.Linear(256, action_dim),
+            torch.nn.Linear(64, action_dim),
         )
 
     def forward(self, state: torch.Tensor) -> torch.Tensor:
