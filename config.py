@@ -22,7 +22,7 @@ q_learning_kwargs = {
     },
 }
 
-dqn_kwargs = {
+ddqn_kwargs = {
     "batch_size": 256,
     "state_dim": 8,
     "action_dim": 2,
@@ -51,7 +51,7 @@ replay_image_buffer_kwargs = {
 train_kwargs = {
     "inference_per_episode": 20000,
     "q_learning_kwargs": q_learning_kwargs,
-    "dqn_kwargs": dqn_kwargs,
+    "ddqn_kwargs": ddqn_kwargs,
     "replay_buffer_kwargs": replay_buffer_kwargs,
     "replay_image_buffer_kwargs": replay_image_buffer_kwargs,
 }
