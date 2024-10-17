@@ -24,7 +24,7 @@ class TrainDQN:
             fps=30,
             display_screen=False,
         )
-        self.dqn_agent = Agent(**self.dqn_kwargs)
+        self.dqn_agent = Agent(**self.ddqn_kwargs)
 
         self.max_train_reward = -np.inf
         self.episode_reward_traj = []
@@ -63,7 +63,7 @@ class TrainDQN:
         save_traj_to_buffer: bool = True,
         save_network: bool = True,
     ):
-        for episode in range(self.dqn_kwargs.get("n_episodes") + 1):
+        for episode in range(self.ddqn_kwargs.get("n_episodes") + 1):
             if episode % self.inference_per_episode == 0:
                 self.inference_once(episode=episode)
             else:
@@ -98,7 +98,7 @@ class TrainDQN:
                     train_reward += redefined_reward
 
                     sample_batch = buffer_data.replay_buffer.sample(
-                        batch_size=self.dqn_kwargs.get("batch_size")
+                        batch_size=self.ddqn_kwargs.get("batch_size")
                     )
                     # update agent policy per step
                     self.dqn_agent.update_policy(sample_batch=sample_batch)
