@@ -16,7 +16,7 @@ os.putenv("SDL_VIDEODRIVER", "fbcon")
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 
-class TrainDQN:
+class TrainDDQN:
     def __init__(self, **kwargs) -> None:
         self.__dict__.update(**kwargs)
         self.env = PLE(
