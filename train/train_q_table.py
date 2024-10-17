@@ -40,7 +40,7 @@ class TrainQTable:
             action_idx = self.q_agent.select_action_idx(
                 scale_state_to_tuple(
                     state_dict=self.env.getGameState(),
-                    state_scale=self.q_learning_kwargs.get("feature_scaling"),
+                    state_scale=self.feature_scaling,
                 )
             )
             reward = self.env.act(self.env.getActionSet()[action_idx])
@@ -70,7 +70,7 @@ class TrainQTable:
             # state
             state = scale_state_to_tuple(
                 state_dict=self.env.getGameState(),
-                state_scale=self.q_learning_kwargs.get("feature_scaling"),
+                state_scale=self.feature_scaling,
             )
 
             # action
@@ -93,7 +93,7 @@ class TrainQTable:
                 reward=redefined_reward,
                 next_state_tuple=scale_state_to_tuple(
                     state_dict=next_state_dict,
-                    state_scale=self.q_learning_kwargs.get("feature_scaling"),
+                    state_scale=self.feature_scaling,
                 ),
             )
 
@@ -115,6 +115,6 @@ class TrainQTable:
     ):
         for episode in range(self.q_learning_kwargs.get("n_episodes") + 1):
             if episode % self.inference_per_episode == 0:
-                self.inference_once(episode=episode)
+                self.inference_once(episode=episode, save_animate=False)
             else:
                 self.train_once(episode=episode)
