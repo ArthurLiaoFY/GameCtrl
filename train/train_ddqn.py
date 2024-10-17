@@ -65,7 +65,7 @@ class TrainDDQN:
     ):
         for episode in range(self.ddqn_kwargs.get("n_episodes") + 1):
             if episode % self.inference_per_episode == 0:
-                self.inference_once(episode=episode)
+                self.inference_once(episode=episode, save_animate=False)
             else:
                 # set up env
                 train_reward = 0
@@ -80,7 +80,7 @@ class TrainDDQN:
                     # state
                     state_tuple = scale_state_to_tuple(
                         state_dict=self.env.getGameState(),
-                        state_scale=None,
+                        state_scale=self.feature_scaling,
                     )
                     state_list.append(state_tuple)
 
@@ -100,7 +100,7 @@ class TrainDDQN:
                     # next state
                     next_state_tuple = scale_state_to_tuple(
                         state_dict=next_state_dict,
-                        state_scale=None,
+                        state_scale=self.feature_scaling,
                     )
                     next_state_list.append(next_state_tuple)
 

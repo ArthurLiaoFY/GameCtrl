@@ -45,13 +45,14 @@ class CollectBufferData:
             reward_list = []
             next_state_list = []
             while not self.env.game_over():
-                state_dict = self.env.getGameState()
+                state_tuple = scale_state_to_tuple(
+                    state_dict=self.env.getGameState(),
+                    state_scale=self.feature_scaling,
+                )
+                state_list.append(state_tuple)
 
                 action_idx = self.expert_agent.select_action_idx(
-                    state_tuple=scale_state_to_tuple(
-                        state_dict=state_dict,
-                        state_scale=self.q_learning_kwargs.get("feature_scaling"),
-                    )
+                    state_tuple=state_tuple
                 )
                 reward = self.env.act(action=self.env.getActionSet()[action_idx])
                 next_state_dict = self.env.getGameState()
@@ -59,18 +60,12 @@ class CollectBufferData:
                     state_dict=next_state_dict, reward=reward
                 )
 
-                state_list.append(
-                    scale_state_to_tuple(
-                        state_dict=state_dict,
-                        state_scale=None,
-                    )
-                )
                 action_idx_list.append(action_idx)
                 reward_list.append(redefined_reward)
                 next_state_list.append(
                     scale_state_to_tuple(
                         state_dict=next_state_dict,
-                        state_scale=None,
+                        state_scale=self.feature_scaling,
                     )
                 )
             if len(state_list) > 0:
