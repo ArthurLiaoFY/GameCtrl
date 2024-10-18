@@ -19,25 +19,10 @@ q_learning_kwargs = {
     "learning_rate_decay": 0.999,
     "explore_rate_decay": 0.999,
     "discount_factor": 0.99,
-    "n_episodes": 5000,
+    "n_episodes": 300000,
     "fully_explore_step": 20000,
 }
 
-ddqn_kwargs = {
-    "batch_size": 64,
-    "state_dim": 8,
-    "action_dim": 2,
-    "learning_rate": 0.005,
-    "explore_rate": 0.001,
-    "learning_rate_min": 1e-5,
-    "explore_rate_min": 0.0,
-    "learning_rate_decay": 0.9999,
-    "explore_rate_decay": 1.0,
-    "discount_factor": 0.99,
-    "n_episodes": 300000,
-    "update_target_each_k_episode": 1000,
-    "fully_explore_step": 0,
-}
 
 # Replay buffer
 replay_buffer_kwargs = {
@@ -50,6 +35,5 @@ train_kwargs = {
     "inference_per_episode": 1000,
     "feature_scaling": feature_scaling,
     "q_learning_kwargs": q_learning_kwargs,
-    "ddqn_kwargs": ddqn_kwargs,
     "replay_buffer_kwargs": replay_buffer_kwargs,
 }

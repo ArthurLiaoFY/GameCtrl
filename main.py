@@ -2,7 +2,6 @@
 
 from config import train_kwargs
 from train.collect_buffer_data import CollectBufferData
-from train.train_ddqn import TrainDDQN
 from train.train_q_table import TrainQTable
 
 # %%
@@ -18,12 +17,6 @@ from train.train_q_table import TrainQTable
 # %%
 # collect replay buffer
 cbd = CollectBufferData(**train_kwargs)
-cbd.extend_buffer_data(extend_amount=2000)
-# %%
 
-# %%
-
-tdqn = TrainDDQN(**train_kwargs)
-tdqn.train_agent(buffer_data=cbd)
 
 # %%
