@@ -113,7 +113,7 @@ class TrainQTable:
         save_traj_to_buffer: bool = True,
         save_network: bool = True,
     ):
-        for episode in range(self.q_learning_kwargs.get("n_episodes") + 1):
+        for episode in range(self.n_episodes + 1):
             if episode % self.inference_per_episode == 0:
                 self.inference_once(episode=episode, save_animate=False)
             else:
